@@ -1,0 +1,12 @@
+streamlit>=1.28.0,<1.33.0
+pandas>=1.5.0,<2.1.0
+numpy>=1.23.0,<1.25.0
+plotly>=5.15.0
+duckdb>=0.9.0,<0.11.0
+tensorflow>=2.13.0
+joblib>=1.2.0
+scikit-learn>=1.2.0,<1.4.0
+xarray>=2022.11.0
+netcdf4>=1.6.0
+h5netcdf>=1.1.0
+cdsapi>=0.5.1
