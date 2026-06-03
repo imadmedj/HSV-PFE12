@@ -1,5 +1,4 @@
 gdown>=4.7.3
-tensorflow==2.21.0
 keras==3.14.1
 streamlit==1.58.0
 numpy==2.4.6
