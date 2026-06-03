@@ -7,4 +7,4 @@ duckdb
 joblib
 plotly
 scikit-learn
-
+tensorflow==2.21.0
