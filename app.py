@@ -217,8 +217,6 @@ def _init_download():
 
     FILES = {
         "models/global_lstm.keras":           "1dl14Ab9UOrzKivODeVb9cYc1UexAGDCx",
-        "models_m2/global_lstm_dessal.keras": "1p97FgaliIu6O7TuZiowUao5_2TzYSOp3",
-        "models_m2/global_lstm_aqua.keras":   "1TEew7kQU1iFlt8QiexlbTVNGION0lOKn",
     }
 
     DATA_FOLDERS = {
