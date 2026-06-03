@@ -18,7 +18,7 @@
 # PATCH À AJOUTER AU DÉBUT DE app.py (après les imports, avant st.set_page_config)
 # Copiez ce bloc et collez-le dans app.py à la ligne indiquée
 # ══════════════════════════════════════════════════════════════════════
-
+import streamlit as st
 import gdown
 import os
 
