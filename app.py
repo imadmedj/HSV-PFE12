@@ -212,14 +212,15 @@ import os
 
 @st.cache_resource(show_spinner=False)
 def _init_download():
+
     # ── Fichiers individuels ──
     FILES = {
-        "models/global_lstm.keras":           "1dl14Ab9UOrzKivODeVb9cYc1UexAGDCx",
-        "models/scaler.pkl":                  "13GctuIPb0DrsOYmsHqVK_JpXUVNoRidW",
-        "models_m2/global_lstm_dessal.keras": "1p97FgaliIu6O7TuZiowUao5_2TzYSOp3",
-        "models_m2/global_lstm_aqua.keras":   "1TEew7kQU1iFlt8QiexlbTVNGION0lOKn",
-        "models_m2/scaler_dessal.pkl":        "18k8JovoptxgkOApI-znnhI1ezkj8E9mC",
-        "models_m2/scaler_aqua.pkl":          "175xWR8vGzaSnSmD9eV0gZWTdIRIYSI-e",
+        "models/global_lstm.keras":           "https://drive.google.com/uc?id=1dl14Ab9UOrzKivODeVb9cYc1UexAGDCx&export=download",
+        "models/scaler.pkl":                  "https://drive.google.com/uc?id=13GctuIPb0DrsOYmsHqVK_JpXUVNoRidW&export=download",
+        "models_m2/global_lstm_dessal.keras": "https://drive.google.com/uc?id=1p97FgaliIu6O7TuZiowUao5_2TzYSOp3&export=download",
+        "models_m2/global_lstm_aqua.keras":   "https://drive.google.com/uc?id=1TEew7kQU1iFlt8QiexlbTVNGION0lOKn&export=download",
+        "models_m2/scaler_dessal.pkl":        "https://drive.google.com/uc?id=18k8JovoptxgkOApI-znnhI1ezkj8E9mC&export=download",
+        "models_m2/scaler_aqua.pkl":          "https://drive.google.com/uc?id=175xWR8vGzaSnSmD9eV0gZWTdIRIYSI-e&export=download",
     }
 
     # ── Sous-dossiers data ──
@@ -231,23 +232,26 @@ def _init_download():
     # Créer les dossiers
     os.makedirs("models",    exist_ok=True)
     os.makedirs("models_m2", exist_ok=True)
-    os.makedirs("data",      exist_ok=True)
+    os.makedirs("data/lstm_final_clean", exist_ok=True)
+    os.makedirs("data/dataset_model2_1999_2023_clean", exist_ok=True)
 
     # Télécharger fichiers individuels
-    for local_path, file_id in FILES.items():
+    for local_path, url in FILES.items():
         if not os.path.exists(local_path):
             try:
-                url = f"https://drive.google.com/uc?id={file_id}"
                 gdown.download(url, local_path, quiet=False, fuzzy=True)
-                print(f"✅ {local_path} téléchargé")
+                size = os.path.getsize(local_path) / (1024*1024)
+                print(f"✅ {local_path} ({size:.1f} MB)")
             except Exception as e:
-                print(f"❌ Erreur {local_path} : {e}")
+                st.warning(f"⚠️ Erreur {local_path} : {e}")
         else:
-            print(f"✅ {local_path} déjà présent")
+            size = os.path.getsize(local_path) / (1024*1024)
+            print(f"✅ {local_path} déjà présent ({size:.1f} MB)")
 
     # Télécharger sous-dossiers data
     for folder_path, folder_id in DATA_FOLDERS.items():
-        if not os.path.exists(folder_path) or not os.listdir(folder_path):
+        files_exist = os.path.exists(folder_path) and len(os.listdir(folder_path)) > 0
+        if not files_exist:
             try:
                 gdown.download_folder(
                     id=folder_id,
@@ -258,13 +262,13 @@ def _init_download():
                 )
                 print(f"✅ {folder_path} téléchargé")
             except Exception as e:
-                print(f"❌ Erreur {folder_path} : {e}")
+                st.warning(f"⚠️ Erreur {folder_path} : {e}")
         else:
-            print(f"✅ {folder_path} déjà présent")
+            n = len(os.listdir(folder_path))
+            print(f"✅ {folder_path} déjà présent ({n} fichiers)")
 
 with st.spinner("⏳ Chargement des données... (première fois ~5 min)"):
     _init_download()
-
 if "lang" not in st.session_state:
     st.session_state["lang"] = "fr"
 
