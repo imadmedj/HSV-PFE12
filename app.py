@@ -286,11 +286,7 @@ def _init_download():
 
 with st.spinner("⏳ Chargement des données... (première fois ~5 min)"):
     _init_download()
-    # DEBUG temporaire
-import os
-st.write("📁 data/:", os.listdir("data") if os.path.exists("data") else "ABSENT")
-st.write("📁 lstm_final_clean:", os.listdir("data/lstm_final_clean") if os.path.exists("data/lstm_final_clean") else "ABSENT")
-st.write("📁 dataset_model2:", os.listdir("data/dataset_model2_1999_2023_clean") if os.path.exists("data/dataset_model2_1999_2023_clean") else "ABSENT")
+    
 if "lang" not in st.session_state:
     st.session_state["lang"] = "fr"
 
