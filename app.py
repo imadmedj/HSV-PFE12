@@ -1779,6 +1779,8 @@ elif page == T("realtime_pred"):
         def _fetch_era5_openmeteo_fallback_m2(lat, lon, date_start, date_end):
             import urllib.request as _ur
             import json as _js
+            import time
+            time.sleep(1)
 
             start_str = pd.Timestamp(date_start).strftime("%Y-%m-%d")
             end_str   = pd.Timestamp(date_end).strftime("%Y-%m-%d")
