@@ -225,7 +225,6 @@ def _init_download():
 }
 
     os.makedirs("models",    exist_ok=True)
-    os.makedirs("models_m2", exist_ok=True)
     os.makedirs("data/lstm_final_clean", exist_ok=True)
     os.makedirs("data/dataset_model2_1999_2023_clean", exist_ok=True)
    
