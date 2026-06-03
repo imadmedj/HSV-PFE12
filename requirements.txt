@@ -7,3 +7,4 @@ duckdb
 joblib
 plotly
 scikit-learn
+gdown>=4.7.3
