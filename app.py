@@ -19,33 +19,7 @@
 # Copiez ce bloc et collez-le dans app.py à la ligne indiquée
 # ══════════════════════════════════════════════════════════════════════
 import streamlit as st
-import gdown
-import os
 
-@st.cache_resource(show_spinner=False)
-def _init_download():
-    FOLDERS = {
-        "data":      "1GyAG_D9to_N-g7w1a_9s4rM1OagyIjiM",
-        "models":    "1KZbtqpPBHvNpZiIir-U4IMmD6caEHQfQ",
-        "models_m2": "1SlBqUXfyNRAb7GSvuYNOGir5GQYX4g_S",
-    }
-    for folder_name, folder_id in FOLDERS.items():
-        if not os.path.exists(folder_name) or not os.listdir(folder_name):
-            try:
-                gdown.download_folder(
-                    id=folder_id,
-                    output=folder_name,
-                    quiet=False,
-                    use_cookies=False,
-                )
-            except Exception as e:
-                st.warning(f"⚠️ Erreur téléchargement {folder_name} : {e}")
-
-with st.spinner("⏳ Chargement des modèles... (première fois ~5 min)"):
-    _init_download()
-# Lance le téléchargement au démarrage
-with st.spinner("⏳ Chargement des modèles et données... (première fois ~5 min)"):
-    _init_download()
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -229,6 +203,61 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+# ══════════════════════════════════════════════════════════════════════
+# COPIEZ CE BLOC JUSTE APRÈS st.set_page_config(...) dans app.py
+# ══════════════════════════════════════════════════════════════════════
+
+import gdown
+import os
+
+@st.cache_resource(show_spinner=False)
+def _init_download():
+    FILES = {
+        "models/global_lstm.keras":           "1dl14Ab9UOrzKivODeVb9cYc1UexAGDCx",
+        "models/scaler.pkl":                  "13GctuIPb0DrsOYmsHqVK_JpXUVNoRidW",
+        "models_m2/global_lstm_dessal.keras": "1p97FgaliIu6O7TuZiowUao5_2TzYSOp3",
+        "models_m2/global_lstm_aqua.keras":   "1TEew7kQU1iFlt8QiexlbTVNGION0lOKn",
+        "models_m2/scaler_dessal.pkl":        "18k8JovoptxgkOApI-znnhI1ezkj8E9mC",
+        "models_m2/scaler_aqua.pkl":          "175xWR8vGzaSnSmD9eV0gZWTdIRIYSI-e",
+    }
+
+    FOLDERS = {
+        "data": "1GyAG_D9to_N-g7w1a_9s4rM1OagyIjiM",
+    }
+
+    os.makedirs("models", exist_ok=True)
+    os.makedirs("models_m2", exist_ok=True)
+    os.makedirs("data", exist_ok=True)
+
+    for local_path, file_id in FILES.items():
+        if not os.path.exists(local_path):
+            try:
+                url = f"https://drive.google.com/uc?id={file_id}"
+                gdown.download(url, local_path, quiet=False, fuzzy=True)
+                print(f"✅ {local_path} téléchargé")
+            except Exception as e:
+                print(f"❌ Erreur {local_path} : {e}")
+        else:
+            print(f"✅ {local_path} déjà présent")
+
+    for folder_name, folder_id in FOLDERS.items():
+        if not os.path.exists(folder_name) or not os.listdir(folder_name):
+            try:
+                gdown.download_folder(
+                    id=folder_id,
+                    output=folder_name,
+                    quiet=False,
+                    use_cookies=False,
+                    remaining_ok=True,
+                )
+                print(f"✅ Dossier {folder_name} téléchargé")
+            except Exception as e:
+                print(f"❌ Erreur dossier {folder_name} : {e}")
+        else:
+            print(f"✅ Dossier {folder_name} déjà présent")
+
+with st.spinner("⏳ Chargement des modèles... (première fois ~5 min)"):
+    _init_download()
 
 if "lang" not in st.session_state:
     st.session_state["lang"] = "fr"
