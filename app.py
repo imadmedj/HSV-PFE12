@@ -225,14 +225,16 @@ def _init_download():
     }
 
     DATA_FOLDERS = {
-        "data/lstm_final_clean":               "1UW969KyDngeF4ad3GAgoY2DoYKTmLYf4",
-        "data/dataset_model2_1999_2023_clean": "1T6qio9i8BSmUsBmTv3sWKgyJHpGKvx-a",
-    }
+    "data/lstm_final_clean":               "1UW969KyDngeF4ad3GAgoY2DoYKTmLYf4",
+    "data/dataset_model2_1999_2023_clean": "1T6qio9i8BSmUsBmTv3sWKgyJHpGKvx-a",
+    "models_m2/plots":                     "1ZLss9iY9HpU6FrprgVlDsoDzGWMqVh4p",
+}
 
     os.makedirs("models",    exist_ok=True)
     os.makedirs("models_m2", exist_ok=True)
     os.makedirs("data/lstm_final_clean", exist_ok=True)
     os.makedirs("data/dataset_model2_1999_2023_clean", exist_ok=True)
+    os.makedirs("models_m2/plots", exist_ok=True)
 
     def _download_file(file_id, dest_path):
         """Télécharge un fichier depuis Google Drive."""
