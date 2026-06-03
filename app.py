@@ -458,8 +458,10 @@ hr{border:none;border-top:1px solid var(--border-s)!important;margin:1.5rem 0!im
 # ═══════════════════════════════════════════════════════════════════════════════
 # CONSTANTES
 # ═══════════════════════════════════════════════════════════════════════════════
-PATH_M1     = "data/lstm_final_clean"
-PATH_M2     = "data/dataset_model2_1999_2023_clean"
+import os
+_BASE = os.path.dirname(os.path.abspath(__file__))
+PATH_M1 = os.path.join(_BASE, "data/lstm_final_clean")
+PATH_M2 = os.path.join(_BASE, "data/dataset_model2_1999_2023_clean")
 LSTM_PATH   = "models/global_lstm.keras"
 SCALER_PATH = "models/scaler.pkl"
 
