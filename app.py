@@ -212,6 +212,7 @@ import os
 
 @st.cache_resource(show_spinner=False)
 def _init_download():
+    # ── Fichiers individuels ──
     FILES = {
         "models/global_lstm.keras":           "1dl14Ab9UOrzKivODeVb9cYc1UexAGDCx",
         "models/scaler.pkl":                  "13GctuIPb0DrsOYmsHqVK_JpXUVNoRidW",
@@ -221,14 +222,18 @@ def _init_download():
         "models_m2/scaler_aqua.pkl":          "175xWR8vGzaSnSmD9eV0gZWTdIRIYSI-e",
     }
 
-    FOLDERS = {
-        "data": "1GyAG_D9to_N-g7w1a_9s4rM1OagyIjiM",
+    # ── Sous-dossiers data ──
+    DATA_FOLDERS = {
+        "data/lstm_final_clean":               "1UW969KyDngeF4ad3GAgoY2DoYKTmLYf4",
+        "data/dataset_model2_1999_2023_clean": "1T6qio9i8BSmUsBmTv3sWKgyJHpGKvx-a",
     }
 
-    os.makedirs("models", exist_ok=True)
+    # Créer les dossiers
+    os.makedirs("models",    exist_ok=True)
     os.makedirs("models_m2", exist_ok=True)
-    os.makedirs("data", exist_ok=True)
+    os.makedirs("data",      exist_ok=True)
 
+    # Télécharger fichiers individuels
     for local_path, file_id in FILES.items():
         if not os.path.exists(local_path):
             try:
@@ -240,23 +245,24 @@ def _init_download():
         else:
             print(f"✅ {local_path} déjà présent")
 
-    for folder_name, folder_id in FOLDERS.items():
-        if not os.path.exists(folder_name) or not os.listdir(folder_name):
+    # Télécharger sous-dossiers data
+    for folder_path, folder_id in DATA_FOLDERS.items():
+        if not os.path.exists(folder_path) or not os.listdir(folder_path):
             try:
                 gdown.download_folder(
                     id=folder_id,
-                    output=folder_name,
+                    output=folder_path,
                     quiet=False,
                     use_cookies=False,
                     remaining_ok=True,
                 )
-                print(f"✅ Dossier {folder_name} téléchargé")
+                print(f"✅ {folder_path} téléchargé")
             except Exception as e:
-                print(f"❌ Erreur dossier {folder_name} : {e}")
+                print(f"❌ Erreur {folder_path} : {e}")
         else:
-            print(f"✅ Dossier {folder_name} déjà présent")
+            print(f"✅ {folder_path} déjà présent")
 
-with st.spinner("⏳ Chargement des modèles... (première fois ~5 min)"):
+with st.spinner("⏳ Chargement des données... (première fois ~5 min)"):
     _init_download()
 
 if "lang" not in st.session_state:
