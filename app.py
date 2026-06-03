@@ -13,7 +13,45 @@
 ╚══════════════════════════════════════════════════════════════════════════════╝
 """
 
+
+# ══════════════════════════════════════════════════════════════════════
+# PATCH À AJOUTER AU DÉBUT DE app.py (après les imports, avant st.set_page_config)
+# Copiez ce bloc et collez-le dans app.py à la ligne indiquée
+# ══════════════════════════════════════════════════════════════════════
+
 import streamlit as st
+import os
+
+@st.cache_resource(show_spinner=False)
+def _init_download():
+    """Télécharge les fichiers depuis Google Drive si absents."""
+    import gdown
+
+    FOLDERS = {
+        "data":      "1GyAG_D9to_N-g7w1a_9s4rM1OagyIjiM",
+        "models":    "1KZbtqpPBHvNpZiIir-U4IMmD6caEHQfQ",
+        "models_m2": "1SlBqUXfyNRAb7GSvuYNOGir5GQYX4g_S",
+    }
+
+    for folder_name, folder_id in FOLDERS.items():
+        if not os.path.exists(folder_name) or not os.listdir(folder_name):
+            print(f"📥 Téléchargement {folder_name} depuis Google Drive...")
+            try:
+                gdown.download_folder(
+                    id=folder_id,
+                    output=folder_name,
+                    quiet=False,
+                    use_cookies=False,
+                )
+                print(f"✅ {folder_name} téléchargé")
+            except Exception as e:
+                print(f"❌ Erreur {folder_name} : {e}")
+        else:
+            print(f"✅ {folder_name} déjà présent")
+
+# Lance le téléchargement au démarrage
+with st.spinner("⏳ Chargement des modèles et données... (première fois ~5 min)"):
+    _init_download()
 import pandas as pd
 import numpy as np
 import plotly.express as px
