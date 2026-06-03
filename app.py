@@ -203,44 +203,62 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
 # ══════════════════════════════════════════════════════════════════════
 # COPIEZ CE BLOC JUSTE APRÈS st.set_page_config(...) dans app.py
 # ══════════════════════════════════════════════════════════════════════
 
 import gdown
 import os
+import requests
 
 @st.cache_resource(show_spinner=False)
 def _init_download():
 
-    # ── Fichiers individuels ──
     FILES = {
-        "models/global_lstm.keras":           "https://drive.google.com/uc?id=1dl14Ab9UOrzKivODeVb9cYc1UexAGDCx&export=download",
-        "models/scaler.pkl":                  "https://drive.google.com/uc?id=13GctuIPb0DrsOYmsHqVK_JpXUVNoRidW&export=download",
-        "models_m2/global_lstm_dessal.keras": "https://drive.google.com/uc?id=1p97FgaliIu6O7TuZiowUao5_2TzYSOp3&export=download",
-        "models_m2/global_lstm_aqua.keras":   "https://drive.google.com/uc?id=1TEew7kQU1iFlt8QiexlbTVNGION0lOKn&export=download",
-        "models_m2/scaler_dessal.pkl":        "https://drive.google.com/uc?id=18k8JovoptxgkOApI-znnhI1ezkj8E9mC&export=download",
-        "models_m2/scaler_aqua.pkl":          "https://drive.google.com/uc?id=175xWR8vGzaSnSmD9eV0gZWTdIRIYSI-e&export=download",
+        "models/global_lstm.keras":           "1dl14Ab9UOrzKivODeVb9cYc1UexAGDCx",
+        "models/scaler.pkl":                  "13GctuIPb0DrsOYmsHqVK_JpXUVNoRidW",
+        "models_m2/global_lstm_dessal.keras": "1p97FgaliIu6O7TuZiowUao5_2TzYSOp3",
+        "models_m2/global_lstm_aqua.keras":   "1TEew7kQU1iFlt8QiexlbTVNGION0lOKn",
+        "models_m2/scaler_dessal.pkl":        "18k8JovoptxgkOApI-znnhI1ezkj8E9mC",
+        "models_m2/scaler_aqua.pkl":          "175xWR8vGzaSnSmD9eV0gZWTdIRIYSI-e",
     }
 
-    # ── Sous-dossiers data ──
     DATA_FOLDERS = {
         "data/lstm_final_clean":               "1UW969KyDngeF4ad3GAgoY2DoYKTmLYf4",
         "data/dataset_model2_1999_2023_clean": "1T6qio9i8BSmUsBmTv3sWKgyJHpGKvx-a",
     }
 
-    # Créer les dossiers
     os.makedirs("models",    exist_ok=True)
     os.makedirs("models_m2", exist_ok=True)
     os.makedirs("data/lstm_final_clean", exist_ok=True)
     os.makedirs("data/dataset_model2_1999_2023_clean", exist_ok=True)
 
+    def _download_file(file_id, dest_path):
+        """Télécharge un fichier depuis Google Drive."""
+        session = requests.Session()
+        URL = "https://drive.google.com/uc?export=download"
+        response = session.get(URL, params={"id": file_id}, stream=True, timeout=60)
+        # Gestion du warning fichier volumineux
+        token = None
+        for key, value in response.cookies.items():
+            if key.startswith("download_warning"):
+                token = value
+                break
+        if token:
+            response = session.get(URL, params={"id": file_id, "confirm": token}, stream=True, timeout=300)
+        with open(dest_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=32768):
+                if chunk:
+                    f.write(chunk)
+        size = os.path.getsize(dest_path) / (1024*1024)
+        return size
+
     # Télécharger fichiers individuels
-    for local_path, url in FILES.items():
-        if not os.path.exists(local_path):
+    for local_path, file_id in FILES.items():
+        if not os.path.exists(local_path) or os.path.getsize(local_path) < 1000:
             try:
-                gdown.download(url, local_path, quiet=False, fuzzy=True)
-                size = os.path.getsize(local_path) / (1024*1024)
+                size = _download_file(file_id, local_path)
                 print(f"✅ {local_path} ({size:.1f} MB)")
             except Exception as e:
                 st.warning(f"⚠️ Erreur {local_path} : {e}")
@@ -258,7 +276,6 @@ def _init_download():
                     output=folder_path,
                     quiet=False,
                     use_cookies=False,
-                    remaining_ok=True,
                 )
                 print(f"✅ {folder_path} téléchargé")
             except Exception as e:
