@@ -217,11 +217,8 @@ def _init_download():
 
     FILES = {
         "models/global_lstm.keras":           "1dl14Ab9UOrzKivODeVb9cYc1UexAGDCx",
-        "models/scaler.pkl":                  "13GctuIPb0DrsOYmsHqVK_JpXUVNoRidW",
         "models_m2/global_lstm_dessal.keras": "1p97FgaliIu6O7TuZiowUao5_2TzYSOp3",
         "models_m2/global_lstm_aqua.keras":   "1TEew7kQU1iFlt8QiexlbTVNGION0lOKn",
-        "models_m2/scaler_dessal.pkl":        "18k8JovoptxgkOApI-znnhI1ezkj8E9mC",
-        "models_m2/scaler_aqua.pkl":          "175xWR8vGzaSnSmD9eV0gZWTdIRIYSI-e",
     }
 
     DATA_FOLDERS = {
