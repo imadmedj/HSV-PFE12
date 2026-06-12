@@ -1494,8 +1494,8 @@ elif page == T("realtime_pred"):
         FEATURES_AQUA_M2   = ["wind_speed","mwp","o2","sst","hour_sin","hour_cos","month_sin","month_cos","x_norm","y_norm"]
         LAT_MIN_M2, LAT_MAX_M2 = 36.70, 37.10
         LON_MIN_M2, LON_MAX_M2 = -1.80,  8.70
-        SEUIL_HSV_DESSAL = 1.4
-        SEUIL_HSV_AQUA   = 1.2
+        SEUIL_HSV_DESSAL = 1.65
+        SEUIL_HSV_AQUA   = 1.8
         PATH_DESSAL_MODEL  = "models_m2/global_lstm_dessal.keras"
         PATH_AQUA_MODEL    = "models_m2/global_lstm_aqua.keras"
         PATH_SCALER_DESSAL = "models_m2/scaler_dessal.pkl"
